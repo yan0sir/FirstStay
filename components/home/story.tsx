@@ -1,13 +1,20 @@
 "use client";
 
 import { motion, useReducedMotion, useScroll } from "motion/react";
-import { useRef } from "react";
+import Image from "next/image";
+import { Fragment, useRef } from "react";
 import { useBooking, useStaySummary, GuestStepper } from "../booking/booking";
 import { Illustration, KeyReveal } from "../illustration";
 import { OvalPattern } from "../brand";
 import { SectionHead } from "../section-head";
 import { Reveal, ScrollWord, SplitLines } from "../motion";
 import { ArrowRight, BrandIcon, Calendar } from "../icons";
+
+// Small oval photographs set into the statement, after these word positions
+const pills: Record<number, { src: string; wide?: boolean }> = {
+  6: { src: "/photos/creek-rise-1br/01.jpg", wide: true },
+  18: { src: "/photos/burj-royale-1br/03.jpg" },
+};
 
 const statement =
   "We look after four homes in Dubai the way we would want to be looked after: fresh hotel linen, a stocked kitchen, fast Wi-Fi and someone on call at any hour. Your key is ready before you land.";
@@ -24,9 +31,16 @@ export function Statement() {
           <SectionHead n={1} label="A key to serenity" />
           <p ref={ref} className="t-lead mt-10 text-[clamp(1.75rem,1.2rem+2.2vw,3.3rem)] leading-[1.14]">
             {words.map((w, i) => (
-              <ScrollWord key={i} progress={scrollYProgress} range={[i / words.length, (i + 1) / words.length]}>
-                {w}
-              </ScrollWord>
+              <Fragment key={i}>
+                <ScrollWord progress={scrollYProgress} range={[i / words.length, (i + 1) / words.length]}>
+                  {w}
+                </ScrollWord>
+                {pills[i] && (
+                  <span aria-hidden className={`pill-img ${pills[i].wide ? "wide" : ""} mr-[0.25em]`}>
+                    <Image src={pills[i].src} alt="" fill sizes="120px" className="object-cover" />
+                  </span>
+                )}
+              </Fragment>
             ))}
           </p>
           <Reveal className="mt-10 flex flex-wrap items-center gap-8">

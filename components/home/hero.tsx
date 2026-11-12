@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { SplitLines, introDelay } from "../motion";
+import { introDelay } from "../motion";
 import { BookingBar } from "./booking-bar";
 
 // Stand-in for the ambient hero video (brief §3.6): a slow crossfade of the best views.
@@ -36,23 +36,30 @@ export function Hero() {
 
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const open = useTransform(p, [0, 0.8], [0, 1], { clamp: true });
-  const headY = useTransform(open, [0, 0.6], [0, -70]);
-  const headO = useTransform(open, [0, 0.4], [1, 0]);
+  // Headline only fades (no movement while scrolling: moving large text is what made it shimmer)
+  const headO = useTransform(open, [0, 0.35], [1, 0]);
+  // The caption stays: Velvet on cream, turning cream once it sits on the photograph
+  const capColor = useTransform(open, [0.45, 0.75], ["#42121e", "#eae5dc"]);
   const frameO = useTransform(open, [0, 0.25], [1, 0]);
   const zoom = useTransform(open, [0, 1], [1.1, 1]);
   const overlayO = useTransform(open, [0.84, 1], [0, 1]);
-  const overlayY = useTransform(open, [0.84, 1], [24, 0]);
   const tintO = useTransform(open, [0.3, 1], [0, 1]);
 
   return (
     <section ref={ref} id="top" aria-label="Welcome" className="relative h-[190svh] md:h-[220svh]">
       <div className="sticky top-0 h-svh overflow-hidden">
         {/* Headline over cream */}
-        <motion.div style={{ y: headY, opacity: headO }} className="container-x relative z-10 flex flex-col items-center pt-[100px] text-center md:pt-[112px]">
-          <motion.p className="eyebrow" initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay }}>
-            Holiday homes in Dubai
-          </motion.p>
-          <SplitLines as="h1" inView={false} delay={delay + 0.05} className="t-display mt-5" lines={[<span key="h">Your key <span className="italic-accent">to</span> Dubai.</span>]} />
+        <motion.div style={{ opacity: headO }} className="container-x relative z-10 flex flex-col items-center pt-[100px] text-center [backface-visibility:hidden] md:pt-[108px]">
+          <motion.div initial={reduce ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.3, delay, ease: [0.22, 1, 0.36, 1] }} className="flex flex-col items-center">
+            <p className="eyebrow">Holiday homes in Dubai</p>
+            <h1 className="t-display mt-5">
+              Your key{" "}
+              <span aria-hidden className="pill-img mx-[0.06em]">
+                <Image src="/photos/burj-royale-1br/02.jpg" alt="" fill sizes="120px" className="object-cover" />
+              </span>{" "}
+              <span className="italic-accent">to</span> Dubai.
+            </h1>
+          </motion.div>
         </motion.div>
 
         {/* Double-line frame around the arch, like the logo's oval */}
@@ -77,35 +84,29 @@ export function Hero() {
           <motion.div style={{ opacity: tintO }} className="absolute inset-0 bg-[linear-gradient(180deg,rgba(66,18,30,.25)_0%,rgba(66,18,30,0)_28%,rgba(66,18,30,.06)_55%,rgba(66,18,30,.6)_100%)]" />
         </motion.div>
 
-        {/* Caption + slide progress (editorial detail), above the booking bar */}
-        <motion.div style={{ opacity: headO }} className="container-x pointer-events-none absolute inset-x-0 bottom-[132px] z-10 hidden items-end justify-between md:flex">
+        {/* Caption + slide progress: stays visible as the arch opens */}
+        <motion.div style={{ color: capColor }} className="container-x pointer-events-none absolute inset-x-0 bottom-[132px] z-10 hidden md:block">
           <div className="w-[26%]">
-            <p className="text-[0.7rem] uppercase tracking-[0.24em] text-palm-700">N° {String(i + 1).padStart(2, "0")}</p>
+            <p className="text-[0.72rem] tracking-[0.2em] opacity-80">{String(i + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</p>
             <AnimatePresence mode="wait" initial={false}>
-              <motion.p key={i} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.5 }} className="mt-2 font-display text-lg italic text-velvet">
+              <motion.p key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} className="mt-2 font-display text-xl italic">
                 {slides[i].caption}
               </motion.p>
             </AnimatePresence>
             <div className="mt-4 flex gap-1.5" aria-hidden>
               {slides.map((s, n) => (
-                <span key={s.src} className="relative h-px w-10 overflow-hidden bg-line-strong">
+                <span key={s.src} className="relative h-px w-10 overflow-hidden bg-current/25">
                   {n === i && !reduce && (
-                    <motion.span className="absolute inset-0 origin-left bg-velvet" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: SLIDE_MS / 1000 + (i === 0 ? introDelay() : 0), ease: "linear" }} />
+                    <motion.span className="absolute inset-0 origin-left bg-current" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: SLIDE_MS / 1000 + (i === 0 ? introDelay() : 0), ease: "linear" }} />
                   )}
                 </span>
               ))}
             </div>
           </div>
-          <div className="flex w-[26%] flex-col items-end gap-3 text-right">
-            <p className="text-[0.7rem] uppercase tracking-[0.24em] text-palm-700">Scroll to step inside</p>
-            <span className="relative block h-12 w-px overflow-hidden bg-line">
-              <motion.span className="absolute inset-x-0 top-0 h-1/2 bg-velvet" animate={reduce ? undefined : { y: ["-100%", "200%"] }} transition={{ duration: 2.2, repeat: Infinity, ease: [0.76, 0, 0.24, 1] }} />
-            </span>
-          </div>
         </motion.div>
 
         {/* Line that appears once the photo fills the screen */}
-        <motion.div style={{ opacity: overlayO, y: overlayY }} className="on-dark pointer-events-none absolute inset-x-0 bottom-[20%] z-10 md:bottom-[22%]">
+        <motion.div style={{ opacity: overlayO }} className="on-dark pointer-events-none absolute inset-x-0 bottom-[22%] z-10 md:bottom-[34%]">
           <div className="container-x">
             <p className="max-w-[16ch] font-display text-[clamp(2.2rem,1.4rem+3.2vw,4.6rem)] font-medium leading-[1] text-timeless [text-shadow:0_2px_30px_rgba(66,18,30,.35)]">
               Four homes. Three neighbourhoods. <span className="italic-accent">Everything ready</span> when you arrive.

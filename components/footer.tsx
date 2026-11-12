@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { homes } from "@/lib/homes";
@@ -49,13 +48,6 @@ export function Footer() {
               </a>
             ))}
           </div>
-        </div>
-
-        {/* Oversized wordmark */}
-        <div className="container-x overflow-hidden pt-12 md:pt-16">
-          <Reveal y={60}>
-            <Image src="/brand/wordmark-light.png" alt="FirstStay" width={664} height={160} sizes="100vw" className="h-auto w-full opacity-95" />
-          </Reveal>
         </div>
 
         <div className="container-x flex flex-col gap-2 pb-28 pt-8 text-sm md:pb-8 text-timeless/60 md:flex-row md:justify-between">

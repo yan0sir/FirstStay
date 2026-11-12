@@ -209,7 +209,7 @@ export function Invitation() {
       <Parallax amount={80} className="absolute inset-0">
         <Image src="/photos/burj-royale-2br/04.jpg" alt="" fill sizes="100vw" className="object-cover" />
       </Parallax>
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(40,12,18,.08)_0%,rgba(40,12,18,.58)_45%,rgba(40,12,18,.72)_100%)] md:bg-[linear-gradient(90deg,rgba(40,12,18,.62)_0%,rgba(40,12,18,.3)_42%,rgba(40,12,18,0)_70%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(40,12,18,.08)_0%,rgba(40,12,18,.58)_45%,rgba(40,12,18,.72)_100%)] md:bg-[linear-gradient(90deg,rgba(40,12,18,.78)_0%,rgba(40,12,18,.55)_38%,rgba(40,12,18,0)_72%)]" />
       <div className="container-x relative flex min-h-[92svh] flex-col justify-end py-20 md:py-28">
         <SectionHead n={10} label="Day or night" light />
         <SplitLines id="contact-title" className="t-h1 mt-6 max-w-4xl text-timeless" lines={["Landing late?", <span key="b" className="italic-accent">We&rsquo;re up.</span>]} />
@@ -220,8 +220,8 @@ export function Invitation() {
         </Reveal>
         <Reveal delay={0.3} className="mt-10 flex flex-wrap gap-4">
           <a href={site.whatsapp} target="_blank" rel="noopener" className="btn btn-light"><span>WhatsApp us</span></a>
-          <a href={site.phone.href} className="btn btn-ghost"><span>Call {site.phone.display}</span></a>
-          <a href={`mailto:${site.email}`} className="btn btn-ghost"><span>Email</span> <ArrowUpRight className="size-4" /></a>
+          <a href={site.phone.href} className="btn btn-palm"><span>Call {site.phone.display}</span></a>
+          <a href={`mailto:${site.email}`} className="link self-center text-timeless">Email us <ArrowUpRight /></a>
         </Reveal>
       </div>
     </section>

@@ -6,6 +6,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
 import { homes, neighbourhoods } from "@/lib/homes";
 import { SectionHead } from "../section-head";
+import { Medallion } from "../medallion";
 import { SplitLines } from "../motion";
 import { ArrowRight } from "../icons";
 
@@ -21,14 +22,12 @@ export function Places() {
     <section id="neighbourhoods" aria-labelledby="places-title" className="scroll-mt-24 bg-palm-700 text-timeless on-dark">
       <div className="relative grid lg:min-h-svh lg:grid-cols-2">
         {/* Brand medallion on the seam: the area's engraved illustration in a cream oval */}
-        <div aria-hidden className="pointer-events-none absolute bottom-[9%] left-1/2 z-10 hidden w-[150px] -translate-x-1/2 lg:block">
-          <div className="relative aspect-[3/5] overflow-hidden rounded-full bg-ivory p-3 shadow-[0_30px_60px_-30px_rgba(30,8,14,.55)]">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div key={illo} className="relative h-full w-full" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}>
-                <Image src={`/brand/illustrations/${illo}.png`} alt="" fill sizes="150px" className="object-contain" />
-              </motion.div>
-            </AnimatePresence>
-          </div>
+        <div className="pointer-events-none absolute bottom-[8%] left-1/2 z-10 hidden w-[170px] -translate-x-1/2 lg:block">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div key={illo} initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}>
+              <Medallion name={illo} />
+            </motion.div>
+          </AnimatePresence>
         </div>
         <div className="container-x flex flex-col justify-center py-20 lg:py-24 lg:pl-[max(3.5rem,calc((100vw-1440px)/2+3.5rem))] lg:pr-16">
           <SectionHead n={5} label="A sense of place" light />

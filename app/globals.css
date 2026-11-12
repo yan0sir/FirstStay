@@ -141,6 +141,15 @@
   .link:hover .arrow { transform: translateX(4px); }
   .on-dark .link { color: var(--color-timeless); }
 
+  /* A small oval photograph set inside a line of text (editorial detail) */
+  .pill-img {
+    position: relative; display: inline-block; vertical-align: middle;
+    width: .5em; height: .74em; margin-top: -.12em;
+    border-radius: 999px; overflow: hidden; background: var(--color-timeless-300);
+    box-shadow: 0 0 0 1px var(--color-timeless), 0 0 0 2px var(--color-line-strong);
+  }
+  .pill-img.wide { width: 1.25em; height: .72em; }
+
   /* The brand oval: arches and stadiums */
   .arch { border-radius: 999px 999px 0 0; overflow: hidden; }
   .stadium { border-radius: 999px; overflow: hidden; }
@@ -190,7 +199,7 @@ details > summary::-webkit-details-marker { display: none; }
   );
 }
 .hero-arch, .hero-arch-frame { --side: 9%; --top: 47%; --ry: 20%; --ryv: 20svh; }
-@media (min-width: 768px) { .hero-arch, .hero-arch-frame { --side: 31%; --top: 43%; --ry: 34%; --ryv: 34svh; } }
+@media (min-width: 768px) { .hero-arch, .hero-arch-frame { --side: 31%; --top: 47%; --ry: 30%; --ryv: 30svh; } }
 
 /* The logo's double oval line, traced around the arch (fades as the arch opens) */
 .hero-arch-frame {

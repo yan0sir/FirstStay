@@ -10,6 +10,7 @@ import { SectionHead } from "@/components/section-head";
 import { Illustration } from "@/components/illustration";
 import { Filmstrip } from "@/components/stay/filmstrip";
 import { HomeCta } from "@/components/stay/home-cta";
+import { Medallion } from "@/components/medallion";
 import { PropertyCard } from "@/components/property-card";
 import { ArrowRight, ArrowUpRight, BrandIcon, Pin } from "@/components/icons";
 import { Gallery } from "@/components/stay/gallery";
@@ -168,11 +169,7 @@ export default async function StayPage({ params }: { params: Promise<{ slug: str
               </Parallax>
             </div>
             <div className="container-x relative flex flex-col justify-center py-20 lg:py-24 lg:pl-28 lg:pr-[max(3.5rem,calc((100vw-1440px)/2+3.5rem))]">
-              <div aria-hidden className="absolute -left-[75px] top-16 hidden w-[150px] lg:block">
-                <div className="relative aspect-[3/5] rounded-full bg-ivory shadow-[0_30px_60px_-30px_rgba(30,8,14,.55)]">
-                  <Image src={`/brand/illustrations/${illo}.png`} alt="" fill sizes="150px" className="object-contain p-3" />
-                </div>
-              </div>
+              <Medallion name={illo} className="absolute -left-[85px] top-16 hidden w-[170px] lg:block" />
               <SectionHead n={3} label="The neighbourhood" light />
               <SplitLines id="area-title" className="t-h2 mt-7 text-timeless" lines={[area.name, <span key="b" className="italic-accent">{area.title.charAt(0).toLowerCase() + area.title.slice(1)}.</span>]} />
               <Reveal delay={0.1}>

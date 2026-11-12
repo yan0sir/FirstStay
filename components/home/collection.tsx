@@ -51,17 +51,30 @@ export function Collection() {
       style={pinned ? { height: `calc(100svh + ${dist}px)` } : undefined}
     >
       <div className={pinned ? "sticky top-0 flex h-svh flex-col justify-center overflow-hidden pt-[84px]" : "section-y"}>
-        <motion.div ref={track} style={pinned ? { x } : undefined} className={pinned ? "flex w-max items-stretch will-change-transform" : "container-x flex flex-col gap-24"}>
+        <motion.div ref={track} style={pinned ? { x } : undefined} className={pinned ? "flex w-max items-stretch will-change-transform" : "container-x flex flex-col gap-20"}>
           {/* Opening page */}
-          <div className={pinned ? "flex w-[34vw] shrink-0 flex-col justify-center pl-[max(3.5rem,calc((100vw-1440px)/2+3.5rem))] pr-[5vw]" : ""}>
+          <div className={pinned ? "flex w-[42vw] max-w-[640px] shrink-0 flex-col justify-center pl-[max(3.5rem,calc((100vw-1440px)/2+3.5rem))] pr-[3vw]" : ""}>
             <SectionHead n={2} label="The collection" />
-            <SplitLines id="homes-title" className="t-h1 mt-8" lines={["Four homes,", <span key="b" className="italic-accent">each with a view.</span>]} />
+            <SplitLines
+              id="homes-title"
+              className="t-h2 mt-8 lg:text-[clamp(3rem,2rem+2.6vw,4.75rem)]"
+              lines={[
+                <span key="a">Four homes,</span>,
+                <span key="b">
+                  <span aria-hidden className="pill-img wide mr-[0.12em]">
+                    <Image src="/photos/creek-rise-1br/01.jpg" alt="" fill sizes="140px" className="object-cover" />
+                  </span>
+                  <span className="italic-accent">each with</span>
+                </span>,
+                <span key="c" className="italic-accent">a view.</span>,
+              ]}
+            />
             <Reveal delay={0.15}>
               <p className="t-body-lg mt-8 max-w-sm">Two in Downtown under the Burj Khalifa, one on the beach at Dubai Harbour, one across the water at Creek Harbour.</p>
             </Reveal>
             {pinned && (
-              <Reveal delay={0.25} className="mt-12 flex items-center gap-4 text-[0.72rem] uppercase tracking-[0.24em] text-palm-700">
-                Scroll to browse <span aria-hidden className="h-px w-16 bg-line-strong" />
+              <Reveal delay={0.25} className="mt-12 flex items-center gap-4 font-display text-lg italic text-palm-700">
+                Keep scrolling to step through <ArrowRight className="size-4" />
               </Reveal>
             )}
           </div>
@@ -69,16 +82,16 @@ export function Collection() {
           {homes.map((h, i) => (
             <Panel key={h.slug} home={h} index={i} pinned={pinned} />
           ))}
-          {pinned && <div aria-hidden className="w-[6vw] shrink-0" />}
+          {pinned && <div aria-hidden className="w-[8vw] shrink-0" />}
         </motion.div>
 
         {pinned && (
           <div className="container-x absolute inset-x-0 bottom-8 flex items-center gap-6" aria-hidden>
-            <span className="text-[0.72rem] tracking-[0.24em] text-palm-700">01</span>
+            <span className="font-display italic text-palm-700">Downtown</span>
             <span className="relative h-px flex-1 bg-line">
               <motion.span style={{ scaleX: progress }} className="absolute inset-0 origin-left bg-velvet" />
             </span>
-            <span className="text-[0.72rem] tracking-[0.24em] text-palm-700">0{homes.length}</span>
+            <span className="font-display italic text-palm-700">Creek Harbour</span>
           </div>
         )}
       </div>
@@ -92,7 +105,11 @@ function Panel({ home: h, index, pinned }: { home: Home; index: number; pinned: 
   return (
     <article
       aria-label={h.name}
-      className={pinned ? "grid w-[min(78vw,1180px)] shrink-0 grid-cols-[1.15fr_1fr] items-center gap-[4vw] px-[3vw]" : "grid gap-10 md:grid-cols-2 md:items-center md:gap-14"}
+      className={
+        pinned
+          ? "ml-[7vw] grid w-[min(82vw,1240px)] shrink-0 grid-cols-[1.1fr_1fr] items-center gap-[5vw] border-l border-line pl-[7vw]"
+          : "grid gap-10 border-t border-line pt-14 md:grid-cols-2 md:items-center md:gap-14"
+      }
     >
       {/* Photo collage: a large arch with a small stadium detail overlapping it */}
       <div className={`relative ${flip && !pinned ? "md:order-2" : ""}`}>
@@ -117,10 +134,9 @@ function Panel({ home: h, index, pinned }: { home: Home; index: number; pinned: 
       </div>
 
       <div className={flip && !pinned ? "md:order-1" : ""}>
-        <p className="font-display text-[clamp(4rem,3rem+3vw,7rem)] font-medium leading-none text-velvet/10" aria-hidden>
-          0{index + 1}
+        <p className="font-display text-lg italic text-palm-700">
+          {h.neighbourhood} <span className="text-palm-700/60">— {index + 1} of {homes.length}</span>
         </p>
-        <p className="eyebrow -mt-4">{h.neighbourhood}</p>
         <h3 className="t-h2 mt-4">{h.name}</h3>
         <p className="mt-5 max-w-md font-display text-xl italic leading-snug text-velvet">{h.hook}</p>
         <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-3 border-y border-line py-4 text-[0.95rem]">
