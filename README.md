@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FirstStay Holiday Homes: website
 
-## Getting Started
+Next.js 15 (App Router) + Tailwind CSS v4 + Motion + Lenis. Brand colours and fonts follow the FirstStay Brand Guidelines: cream (Timeless) page, Velvet red and Palm green accents, Leather body text.
 
-First, run the development server:
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # production build (stop the dev server first)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Pages
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Route | What it is |
+|---|---|
+| `/` | Homepage: arch hero that opens to full-bleed, homes, neighbourhoods, how we host, reviews, arrival steps, owners, FAQ, contact band, newsletter |
+| `/stays/[slug]` | One page per home (4), with gallery + lightbox, booking card, amenities, location, reviews |
+| `/sitemap.xml`, `/robots.txt`, `/manifest.webmanifest` | Generated from `app/` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Bookings hand off to the Hostaway booking engine (`lib/booking.ts`) with dates and guests prefilled.
 
-## Learn More
+## SEO (UAE)
 
-To learn more about Next.js, take a look at the following resources:
+- `en-AE` language, `en_AE` Open Graph locale, Dubai geo meta tags (`AE-DU`)
+- Structured data: Organization + LodgingBusiness (Business Bay office), WebSite, ItemList of homes, FAQPage, and per home VacationRental + BreadcrumbList (`lib/seo.ts`)
+- Canonicals, sitemap with images, share images (`app/opengraph-image.jpg`), titles and descriptions per page
+- Old firststay.ae URLs redirect to the new pages (`next.config.ts`)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Search engines are blocked until launch
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+By default the site sends `noindex` (meta tag + `X-Robots-Tag` header) and `robots.txt` disallows everything.
 
-## Deploy on Vercel
+To launch, set these environment variables on Vercel (Production) and redeploy:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Variable | Value |
+|---|---|
+| `ALLOW_INDEXING` | `true` |
+| `NEXT_PUBLIC_SITE_URL` | `https://firststay.ae` (or the live domain) |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Content
+
+- Homes, neighbourhoods, reviews: `lib/homes.ts` (facts from Hostaway, see `../data/listings.json`)
+- Contact details and social links: `lib/site.ts`
+- FAQ: `lib/faq.ts` (also published as structured data, so keep answers accurate)
+- Photos: `public/photos/<home>/0N.jpg`; brand marks, icons and illustrations: `public/brand/`
+
+## Still to do
+
+- PP Cirka web licence: load it with `next/font/local` as `--font-cirka` (Cormorant Garamond stands in)
+- Confirm the Hostaway booking-engine query parameters (`lib/booking.ts`)
+- Connect the newsletter form (`app/api/newsletter/route.ts`) to a mailing tool
+- Confirm public phone/WhatsApp number and office hours (`lib/site.ts`)
+- Interior photos for Grand Bleu (only terrace and sea views so far)
