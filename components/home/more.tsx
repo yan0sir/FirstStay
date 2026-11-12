@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { AnimatePresence, animate, motion, useInView, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { AnimatePresence, animate, motion, useInView, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { averageRating, homes, reviews } from "@/lib/homes";
 import { faqs } from "@/lib/faq";
 import { site, whatsappWith } from "@/lib/site";
 import { OvalPattern } from "../brand";
-import { useBooking } from "../booking/booking";
+import { SectionHead } from "../section-head";
 import { Parallax, Reveal, SplitLines, Unmask } from "../motion";
 import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Plus } from "../icons";
 
@@ -39,7 +39,7 @@ export function Reviews() {
     <section id="reviews" aria-labelledby="reviews-title" className="section-y scroll-mt-24">
       <div className="container-x grid gap-16 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <Reveal><p className="eyebrow">Guests say</p></Reveal>
+          <SectionHead n={6} label="Guests say" />
           <h2 id="reviews-title" className="sr-only">Guest reviews</h2>
           <Reveal delay={0.1} className="mt-8 flex items-end gap-4">
             <CountUp to={averageRating} decimals={1} className="font-display text-[clamp(5rem,3rem+7vw,9rem)] font-medium leading-[0.8] text-velvet" />
@@ -85,54 +85,6 @@ export function Reviews() {
 
 /* ------------------------------------------------------------------ */
 
-const steps = [
-  { n: "01", title: "Book direct", body: "Pick your dates here and pay securely on our booking page. Questions first? WhatsApp us." },
-  { n: "02", title: "Your key and guide", body: "Before you land you'll have check-in details, directions and our guide to the neighbourhood." },
-  { n: "03", title: "We're on call", body: "Our team in Business Bay answers day and night, for anything from towels to tables for dinner." },
-];
-
-/** Arriving with FirstStay: three steps joined by a line that draws itself as you scroll. */
-export function Arrive() {
-  const ref = useRef<HTMLDivElement>(null);
-  const booking = useBooking();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.8", "end 0.6"] });
-  const draw = useTransform(scrollYProgress, [0, 1], [0, 1]);
-
-  return (
-    <section aria-labelledby="arrive-title" className="section-y bg-ivory">
-      <div className="container-x grid gap-14 lg:grid-cols-12">
-        <div className="lg:col-span-5">
-          <Reveal><p className="eyebrow">Arriving with FirstStay</p></Reveal>
-          <SplitLines id="arrive-title" className="t-h2 mt-6" lines={["Three steps", <span key="b" className="italic-accent">to your door.</span>]} />
-          <Reveal delay={0.2} className="mt-10">
-            <button type="button" onClick={() => booking.open()} className="btn btn-primary"><span>Check availability</span></button>
-          </Reveal>
-          <Reveal delay={0.3} className="relative mt-14 hidden h-[340px] lg:block">
-            <Image src="/brand/illustrations/key-hand.png" alt="" fill sizes="300px" className="object-contain object-left opacity-90" />
-          </Reveal>
-        </div>
-        <div ref={ref} className="relative lg:col-span-6 lg:col-start-7">
-          <svg aria-hidden className="absolute left-[23px] top-6 h-[calc(100%-3rem)] w-px overflow-visible" preserveAspectRatio="none" viewBox="0 0 1 100">
-            <line x1="0.5" y1="0" x2="0.5" y2="100" stroke="var(--color-line)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-            <motion.line x1="0.5" y1="0" x2="0.5" y2="100" stroke="var(--color-velvet)" strokeWidth="1" vectorEffect="non-scaling-stroke" style={{ pathLength: draw }} />
-          </svg>
-          <ol className="space-y-14 md:space-y-20">
-            {steps.map((s, i) => (
-              <Reveal as="li" key={s.n} delay={i * 0.1} className="relative grid grid-cols-[48px_1fr] gap-6 md:gap-10">
-                <span className="relative z-10 flex size-12 items-center justify-center rounded-full border border-velvet bg-ivory font-display text-lg text-velvet">{s.n}</span>
-                <div>
-                  <h3 className="t-h3">{s.title}</h3>
-                  <p className="mt-3 max-w-md">{s.body}</p>
-                </div>
-              </Reveal>
-            ))}
-          </ol>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ------------------------------------------------------------------ */
 
 const ownerFacts = [
@@ -160,7 +112,7 @@ export function Owners() {
           </div>
         </div>
         <div className="order-1 lg:order-2 lg:col-span-6 lg:col-start-7">
-          <Reveal><p className="eyebrow">For property owners</p></Reveal>
+          <SectionHead n={8} label="For property owners" />
           <SplitLines id="owners-title" className="t-h2 mt-6" lines={["Own a home in Dubai?", <span key="b" className="italic-accent">Let us look after it.</span>]} />
           <Reveal delay={0.15}>
             <p className="t-body-lg mt-7 max-w-lg">
@@ -197,7 +149,7 @@ export function Faq() {
     <section id="faq" aria-labelledby="faq-title" className="section-y scroll-mt-24 bg-ivory">
       <div className="container-x grid gap-12 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <Reveal><p className="eyebrow">Good to know</p></Reveal>
+          <SectionHead n={9} label="Good to know" />
           <SplitLines id="faq-title" className="t-h2 mt-6" lines={["Questions,", <span key="b" className="italic-accent">answered.</span>]} />
           <Reveal delay={0.15}>
             <p className="mt-6 max-w-xs">Something else? <a className="link" href={site.whatsapp} target="_blank" rel="noopener">WhatsApp us</a> and we&rsquo;ll reply quickly.</p>
@@ -259,7 +211,7 @@ export function Invitation() {
       </Parallax>
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(40,12,18,.08)_0%,rgba(40,12,18,.58)_45%,rgba(40,12,18,.72)_100%)] md:bg-[linear-gradient(90deg,rgba(40,12,18,.62)_0%,rgba(40,12,18,.3)_42%,rgba(40,12,18,0)_70%)]" />
       <div className="container-x relative flex min-h-[92svh] flex-col justify-end py-20 md:py-28">
-        <Reveal><p className="eyebrow">Day or night</p></Reveal>
+        <SectionHead n={10} label="Day or night" light />
         <SplitLines id="contact-title" className="t-h1 mt-6 max-w-4xl text-timeless" lines={["Landing late?", <span key="b" className="italic-accent">We&rsquo;re up.</span>]} />
         <Reveal delay={0.2}>
           <p className="t-body-lg mt-7 max-w-xl text-timeless/90">

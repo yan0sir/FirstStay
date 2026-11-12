@@ -2,49 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { useState } from "react";
 import { homes, neighbourhoods } from "@/lib/homes";
-import { PropertyCard } from "../property-card";
-import { Reveal, SplitLines } from "../motion";
+import { SectionHead } from "../section-head";
+import { SplitLines } from "../motion";
 import { ArrowRight } from "../icons";
-
-/** The four homes, two columns; the right column drifts against the left as you scroll. */
-export function Homes() {
-  const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const offset = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [120, -120]);
-
-  return (
-    <section id="homes" aria-labelledby="homes-title" className="section-y scroll-mt-24">
-      <div className="container-x">
-        <div className="grid items-end gap-8 md:grid-cols-12">
-          <div className="md:col-span-8">
-            <Reveal><p className="eyebrow">The homes</p></Reveal>
-            <SplitLines id="homes-title" className="t-h2 mt-6" lines={["Four homes,", <span key="b"><span className="italic-accent">each with</span> a view.</span>]} />
-          </div>
-          <Reveal className="md:col-span-4" delay={0.15}>
-            <p className="max-w-sm">Two in Downtown under the Burj Khalifa, one on the beach at Dubai Harbour and one across the water at Creek Harbour.</p>
-          </Reveal>
-        </div>
-
-        <div ref={ref} className="mt-16 grid gap-16 md:mt-24 md:grid-cols-2 md:gap-x-[clamp(2rem,6vw,7rem)] md:gap-y-28">
-          {homes.map((h, i) => {
-            const right = i % 2 === 1;
-            return (
-              <motion.div key={h.slug} style={right ? { y: offset } : undefined} className={right ? "md:mt-40" : ""}>
-                <Reveal delay={right ? 0.12 : 0}>
-                  <PropertyCard home={h} index={i} />
-                </Reveal>
-              </motion.div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /** A sense of place: pick a neighbourhood; the photo wipes across and the story changes. */
 export function Places() {
@@ -52,12 +15,23 @@ export function Places() {
   const reduce = useReducedMotion();
   const n = neighbourhoods[active];
   const here = homes.filter((h) => h.area === n.slug);
+  const illo = { "downtown-dubai": "key", "dubai-harbour": "palm", "dubai-creek-harbour": "bird" }[n.slug];
 
   return (
     <section id="neighbourhoods" aria-labelledby="places-title" className="scroll-mt-24 bg-palm-700 text-timeless on-dark">
-      <div className="grid lg:min-h-svh lg:grid-cols-2">
+      <div className="relative grid lg:min-h-svh lg:grid-cols-2">
+        {/* Brand medallion on the seam: the area's engraved illustration in a cream oval */}
+        <div aria-hidden className="pointer-events-none absolute bottom-[9%] left-1/2 z-10 hidden w-[150px] -translate-x-1/2 lg:block">
+          <div className="relative aspect-[3/5] overflow-hidden rounded-full bg-ivory p-3 shadow-[0_30px_60px_-30px_rgba(30,8,14,.55)]">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div key={illo} className="relative h-full w-full" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}>
+                <Image src={`/brand/illustrations/${illo}.png`} alt="" fill sizes="150px" className="object-contain" />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
         <div className="container-x flex flex-col justify-center py-20 lg:py-24 lg:pl-[max(3.5rem,calc((100vw-1440px)/2+3.5rem))] lg:pr-16">
-          <Reveal><p className="eyebrow">A sense of place</p></Reveal>
+          <SectionHead n={5} label="A sense of place" light />
           <SplitLines id="places-title" className="t-h2 mt-6 text-timeless" lines={["Three corners", <span key="b" className="italic-accent">of the city.</span>]} />
 
           <div role="tablist" aria-label="Neighbourhoods" className="mt-12 border-t border-timeless/25">

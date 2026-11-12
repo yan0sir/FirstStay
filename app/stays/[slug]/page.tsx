@@ -43,7 +43,7 @@ export default async function StayPage({ params }: { params: Promise<{ slug: str
   return (
     <>
       <Header pill={false} />
-      <main id="main" className="pt-[72px] md:pt-[92px]">
+      <main id="main" className="pt-[72px] md:pt-[84px]">
         {/* Title */}
         <section className="container-x pb-10 pt-10 md:pb-14 md:pt-16">
           <nav aria-label="Breadcrumb" className="text-sm">

@@ -31,6 +31,7 @@
 
 @layer base {
   html {
+    overflow-x: clip;
     background: var(--color-timeless);
     color: var(--color-leather);
     -webkit-font-smoothing: antialiased;
@@ -188,4 +189,37 @@ details > summary::-webkit-details-marker { display: none; }
           calc(var(--ry) * var(--k)) calc(var(--ry) * var(--k)) 0 0
   );
 }
-@media (min-width: 768px) { .hero-arch { --side: 31%; --top: 43%; --ry: 34%; } }
+.hero-arch, .hero-arch-frame { --side: 9%; --top: 47%; --ry: 20%; --ryv: 20svh; }
+@media (min-width: 768px) { .hero-arch, .hero-arch-frame { --side: 31%; --top: 43%; --ry: 34%; --ryv: 34svh; } }
+
+/* The logo's double oval line, traced around the arch (fades as the arch opens) */
+.hero-arch-frame {
+  left: calc(var(--side) - 13px); right: calc(var(--side) - 13px); top: calc(var(--top) - 13px); bottom: -2px;
+  border: 1px solid var(--color-line-strong); border-bottom: 0;
+  border-radius: 50% 50% 0 0 / calc(var(--ryv) + 13px) calc(var(--ryv) + 13px) 0 0;
+}
+.hero-arch-frame::before {
+  content: ""; position: absolute; inset: 5px 5px -2px 5px;
+  border: 1px solid var(--color-line); border-bottom: 0; border-radius: inherit;
+}
+
+/*
+ * Intro reveal, once per visit (an inline script in <head> sets html[data-intro]).
+ * Pure CSS so it plays before any JavaScript: the oval draws, the monogram appears, the curtain lifts.
+ */
+.intro { position: fixed; inset: 0; z-index: 120; display: grid; place-items: center; background: var(--color-timeless); pointer-events: none;
+  animation: intro-lift 1s var(--ease-curtain) 1.55s forwards; }
+html:not([data-intro="play"]) .intro { display: none; }
+.intro svg rect { stroke-dasharray: 1; stroke-dashoffset: 1; animation: intro-draw 1.1s var(--ease-soft) .1s forwards; }
+.intro .intro-mark { opacity: 0; transform: translateY(8px); animation: intro-in .8s var(--ease-soft) .55s forwards; }
+.intro .intro-word { opacity: 0; letter-spacing: .5em; animation: intro-word 1s var(--ease-soft) .75s forwards; }
+@keyframes intro-draw { to { stroke-dashoffset: 0; } }
+@keyframes intro-in { to { opacity: 1; transform: none; } }
+@keyframes intro-word { to { opacity: 1; letter-spacing: .32em; } }
+@keyframes intro-lift { to { transform: translateY(-100%); visibility: hidden; } }
+@media (prefers-reduced-motion: reduce) { .intro { display: none; } }
+
+/* Page enter: content rises in under a short cream veil (app/template.tsx) */
+@keyframes page-veil { to { opacity: 0; visibility: hidden; } }
+.page-veil { position: fixed; inset: 0; z-index: 110; background: var(--color-timeless); pointer-events: none; animation: page-veil .7s var(--ease-soft) .05s forwards; }
+html[data-intro="play"] .page-veil { display: none; }

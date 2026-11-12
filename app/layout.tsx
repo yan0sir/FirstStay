@@ -4,6 +4,7 @@ import "./globals.css";
 import { SmoothScroll } from "@/components/motion";
 import { BookingProvider } from "@/components/booking/booking";
 import { JsonLd } from "@/components/json-ld";
+import { Intro, introScript } from "@/components/intro";
 import { allowIndexing, defaultDescription, siteJsonLd, siteUrl } from "@/lib/seo";
 import { site } from "@/lib/site";
 
@@ -75,8 +76,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en-AE" dir="ltr" className={`${display.variable} ${sans.variable}`}>
+    <html lang="en-AE" dir="ltr" className={`${display.variable} ${sans.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: introScript }} />
+      </head>
       <body className="grain">
+        <Intro />
         <a href="#main" className="sr-only z-[100] bg-velvet px-4 py-3 text-timeless focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
           Skip to content
         </a>

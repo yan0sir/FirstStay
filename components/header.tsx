@@ -39,11 +39,11 @@ export function Header({ pill: showPill = true }: { pill?: boolean } = {}) {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,height] duration-500 ${
+        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-700 ${
           scrolled ? "border-b border-line bg-timeless/92 backdrop-blur-md" : "border-b border-transparent"
         }`}
       >
-        <div className={`container-x grid grid-cols-[1fr_auto_1fr] items-center transition-[height] duration-500 ${scrolled ? "h-16 md:h-[72px]" : "h-[72px] md:h-[92px]"}`}>
+        <div className="container-x grid h-[72px] grid-cols-[1fr_auto_1fr] items-center md:h-[84px]">
           <button
             type="button"
             onClick={() => setMenu(true)}
@@ -59,7 +59,7 @@ export function Header({ pill: showPill = true }: { pill?: boolean } = {}) {
           </button>
 
           <Link href="/" aria-label="FirstStay Holiday Homes, home" className="justify-self-center">
-            <span className={`block origin-center transition-transform duration-500 ${scrolled ? "scale-[.86]" : ""}`}><Lockup /></span>
+            <Lockup />
           </Link>
 
           <div className="flex items-center gap-6 justify-self-end">
@@ -140,7 +140,7 @@ function Menu({ open, onClose }: { open: boolean; onClose: () => void }) {
           data-lenis-prevent
         >
           <OvalPattern className="text-velvet" opacity={0.045} />
-          <div className="container-x relative flex h-[72px] items-center justify-between md:h-[92px]">
+          <div className="container-x relative flex h-[72px] items-center justify-between md:h-[84px]">
             <button type="button" onClick={onClose} className="group -ml-2 flex h-11 items-center gap-3 px-2 text-[0.8rem] font-medium uppercase tracking-[0.2em] text-velvet">
               <Close className="size-6 transition-transform duration-500 group-hover:rotate-90" />
               Close
@@ -149,7 +149,7 @@ function Menu({ open, onClose }: { open: boolean; onClose: () => void }) {
             <span className="w-[5.5rem]" aria-hidden />
           </div>
 
-          <div className="container-x relative grid min-h-[calc(100svh-92px)] gap-10 pb-10 pt-4 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
+          <div className="container-x relative grid min-h-[calc(100svh-84px)] gap-10 pb-10 pt-4 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
             <nav aria-label="Main">
               <ul className="border-t border-line">
                 {nav.map((item, i) => (

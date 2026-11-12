@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
+import { motion, useInView, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
 import Lenis from "lenis";
 import { useEffect, useRef, type ReactNode } from "react";
 
@@ -27,6 +27,10 @@ export function SmoothScroll() {
     };
     document.addEventListener("click", onClick);
 
+    // Once the intro has lifted, later page changes get the regular page transition
+    const html = document.documentElement;
+    const introDone = html.dataset.intro === "play" ? setTimeout(() => (html.dataset.intro = "done"), 2800) : undefined;
+
     let id = 0;
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       lenis = new Lenis({ lerp: 0.1 });
@@ -42,12 +46,19 @@ export function SmoothScroll() {
     }
     return () => {
       document.removeEventListener("click", onClick);
+      clearTimeout(introDone);
       cancelAnimationFrame(id);
       lenis?.destroy();
       lenis = null;
     };
   }, []);
   return null;
+}
+
+/** Seconds the first-visit intro still covers the page (0 when it isn't playing). */
+export function introDelay() {
+  if (typeof document === "undefined") return 0;
+  return document.documentElement.dataset.intro === "play" ? 1.75 : 0;
 }
 
 /** Freeze page scroll while a dialog or the menu is open. */
@@ -86,14 +97,18 @@ export function Reveal({ children, delay = 0, y = 24, className = "", as = "div"
 /** Headline lines rise out of a mask, one after another. */
 export function SplitLines({ lines, className = "", delay = 0, as: Tag = "h2", inView = true, id }: { lines: ReactNode[]; className?: string; delay?: number; as?: "h1" | "h2" | "h3" | "p"; inView?: boolean; id?: string }) {
   const reduce = useReducedMotion();
+  // Watch the heading itself: the hidden lines sit outside their masks, so they never "intersect" on their own
+  const ref = useRef<HTMLHeadingElement>(null);
+  const seen = useInView(ref, { once: true, margin: "0px 0px -8% 0px" });
+  const show = !inView || seen;
   return (
-    <Tag id={id} className={className}>
+    <Tag ref={ref} id={id} className={className}>
       {lines.map((line, i) => (
         <span key={i} className="block overflow-hidden pb-[0.08em] -mb-[0.08em]">
           <motion.span
             className="block"
             initial={reduce ? false : { y: "105%" }}
-            {...(inView ? { whileInView: { y: "0%" }, viewport: { once: true, margin: "0px 0px -8% 0px" } } : { animate: { y: "0%" } })}
+            animate={show ? { y: "0%" } : undefined}
             transition={{ duration: 1.15, delay: delay + i * 0.11, ease }}
           >
             {line}

@@ -6,7 +6,7 @@ import { GuestStepper, useBooking, useStaySummary } from "../booking/booking";
 import { Calendar, Pin } from "../icons";
 
 /** Desktop booking bar on the hero: Home · Dates · Guests · Search. Home and dates open the booking dialog. */
-export function BookingBar() {
+export function BookingBar({ delay = 0.7 }: { delay?: number }) {
   const b = useBooking();
   const { dates, nights } = useStaySummary();
   const reduce = useReducedMotion();
@@ -18,7 +18,7 @@ export function BookingBar() {
     <motion.div
       initial={reduce ? false : { y: 40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 1.1, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 1.1, delay, ease: [0.22, 1, 0.36, 1] }}
       className="container-x pb-6"
     >
       <div role="search" aria-label="Check availability" className="grid h-[84px] grid-cols-[1.1fr_1.3fr_auto_auto] items-stretch divide-x divide-line bg-ivory shadow-[0_30px_60px_-30px_rgba(66,18,30,.45)]">
