@@ -1,20 +1,13 @@
 "use client";
 
 import { motion, useReducedMotion, useScroll } from "motion/react";
-import Image from "next/image";
-import { Fragment, useRef } from "react";
+import { useRef } from "react";
 import { useBooking, useStaySummary, GuestStepper } from "../booking/booking";
 import { Illustration, KeyReveal } from "../illustration";
 import { OvalPattern } from "../brand";
 import { SectionHead } from "../section-head";
 import { Reveal, ScrollWord, SplitLines } from "../motion";
 import { ArrowRight, BrandIcon, Calendar } from "../icons";
-
-// Small oval photographs set into the statement, after these word positions
-const pills: Record<number, { src: string; wide?: boolean }> = {
-  6: { src: "/photos/creek-rise-1br/01.jpg", wide: true },
-  18: { src: "/photos/burj-royale-1br/03.jpg" },
-};
 
 const statement =
   "We look after four homes in Dubai the way we would want to be looked after: fresh hotel linen, a stocked kitchen, fast Wi-Fi and someone on call at any hour. Your key is ready before you land.";
@@ -25,22 +18,15 @@ export function Statement() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.85", "end 0.45"] });
   const words = statement.split(" ");
   return (
-    <section aria-label="Welcome to FirstStay" className="section-y relative overflow-hidden">
+    <section aria-label="Welcome to FirstStay" className="section-y relative">
       <div className="container-x grid items-center gap-12 lg:grid-cols-12">
         <div className="lg:col-span-8">
           <SectionHead n={1} label="A key to serenity" />
           <p ref={ref} className="t-lead mt-10 text-[clamp(1.75rem,1.2rem+2.2vw,3.3rem)] leading-[1.14]">
             {words.map((w, i) => (
-              <Fragment key={i}>
-                <ScrollWord progress={scrollYProgress} range={[i / words.length, (i + 1) / words.length]}>
-                  {w}
-                </ScrollWord>
-                {pills[i] && (
-                  <span aria-hidden className={`pill-img ${pills[i].wide ? "wide" : ""} mr-[0.25em]`}>
-                    <Image src={pills[i].src} alt="" fill sizes="120px" className="object-cover" />
-                  </span>
-                )}
-              </Fragment>
+              <ScrollWord key={i} progress={scrollYProgress} range={[i / words.length, (i + 1) / words.length]}>
+                {w}
+              </ScrollWord>
             ))}
           </p>
           <Reveal className="mt-10 flex flex-wrap items-center gap-8">
@@ -49,7 +35,7 @@ export function Statement() {
           </Reveal>
         </div>
         <div className="hidden lg:col-span-3 lg:col-start-10 lg:block">
-          <Illustration name="peony" drift={50} className="mx-auto w-full max-w-[300px]" />
+          <Illustration name="peony" drift={20} className="mx-auto w-full max-w-[340px]" />
         </div>
       </div>
     </section>
@@ -75,15 +61,19 @@ export function Facilities() {
       <div className="container-x grid gap-14 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-32">
-            <SectionHead n={4} label="How we host" />
-            <SplitLines id="ready-title" className="t-h2 mt-8" lines={["Everything's ready,", <span key="b" className="italic-accent">before you are.</span>]} />
+            <div className="flex items-start justify-between gap-6">
+              <div>
+                <SectionHead n={4} label="How we host" />
+                <SplitLines id="ready-title" className="t-h2 mt-8" lines={["Everything's ready,", <span key="b" className="italic-accent">before you are.</span>]} />
+              </div>
+              <Illustration name="armchair" drift={12} className="hidden w-[110px] shrink-0 lg:block xl:w-[140px]" />
+            </div>
             <Reveal delay={0.1}>
               <p className="mt-6 max-w-sm">The comforts of a good hotel, the space and privacy of your own home, in every one of our apartments.</p>
             </Reveal>
             <Reveal delay={0.2} className="mt-8">
               <button type="button" onClick={() => booking.open()} className="btn btn-outline"><span>Check availability</span></button>
             </Reveal>
-            <Illustration name="armchair" drift={30} className="mt-12 hidden w-[42%] max-w-[190px] lg:block" />
           </div>
         </div>
         <ul className="border-t border-line lg:col-span-6 lg:col-start-7">

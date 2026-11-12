@@ -5,7 +5,7 @@ import { motion, useInView, useReducedMotion, useScroll, useTransform } from "mo
 import { useRef } from "react";
 
 const sizes: Record<string, [number, number]> = {
-  armchair: [393, 690], bird: [700, 745], burj: [358, 781], palm: [417, 690], peony: [700, 593], key: [655, 690],
+  armchair: [449, 746], bird: [760, 805], burj: [420, 843], palm: [473, 746], peony: [760, 672], key: [726, 746],
 };
 
 /**

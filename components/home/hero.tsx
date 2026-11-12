@@ -105,10 +105,11 @@ export function Hero() {
           </div>
         </motion.div>
 
-        {/* Line that appears once the photo fills the screen */}
-        <motion.div style={{ opacity: overlayO }} className="on-dark pointer-events-none absolute inset-x-0 bottom-[22%] z-10 md:bottom-[34%]">
-          <div className="container-x">
-            <p className="max-w-[16ch] font-display text-[clamp(2.2rem,1.4rem+3.2vw,4.6rem)] font-medium leading-[1] text-timeless [text-shadow:0_2px_30px_rgba(66,18,30,.35)]">
+        {/* Line that appears once the photo fills the screen: compact, on a soft shade so it reads */}
+        <motion.div style={{ opacity: overlayO }} className="on-dark pointer-events-none absolute inset-0 z-10">
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(40,12,18,.55)_0%,rgba(40,12,18,.25)_38%,rgba(40,12,18,0)_60%)]" />
+          <div className="container-x absolute inset-x-0 bottom-[30%] md:bottom-[36%]">
+            <p className="max-w-[19ch] font-display text-[clamp(1.6rem,1.1rem+1.6vw,2.6rem)] font-medium leading-[1.08] text-timeless [text-shadow:0_1px_18px_rgba(30,8,14,.45)]">
               Four homes. Three neighbourhoods. <span className="italic-accent">Everything ready</span> when you arrive.
             </p>
           </div>

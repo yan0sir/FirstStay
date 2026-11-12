@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
+import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { homes, type Home } from "@/lib/homes";
 import { useBooking } from "../booking/booking";
@@ -41,6 +41,19 @@ export function Collection() {
   const { scrollYProgress } = useScroll({ target: section, offset: ["start start", "end end"] });
   const x = useTransform(scrollYProgress, [0, 1], [0, -dist]);
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+
+  // Which home is in the middle of the screen, so the footer label matches the panel's own label
+  const [active, setActive] = useState(0);
+  useMotionValueEvent(x, "change", (v) => {
+    const panels = track.current?.querySelectorAll<HTMLElement>("article");
+    if (!panels?.length) return;
+    const centre = -v + window.innerWidth / 2;
+    let k = 0;
+    panels.forEach((p, n) => {
+      if (p.offsetLeft <= centre) k = n;
+    });
+    setActive(k);
+  });
 
   return (
     <section
@@ -87,11 +100,24 @@ export function Collection() {
 
         {pinned && (
           <div className="container-x absolute inset-x-0 bottom-8 flex items-center gap-6" aria-hidden>
-            <span className="font-display italic text-palm-700">Downtown</span>
+            <span className="relative block h-7 w-48 overflow-hidden font-display text-lg italic text-palm-700">
+              <AnimatePresence initial={false}>
+                <motion.span
+                  key={active}
+                  className="absolute inset-0"
+                  initial={{ y: "100%", opacity: 0 }}
+                  animate={{ y: "0%", opacity: 1 }}
+                  exit={{ y: "-100%", opacity: 0 }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  {homes[active].neighbourhood}
+                </motion.span>
+              </AnimatePresence>
+            </span>
             <span className="relative h-px flex-1 bg-line">
               <motion.span style={{ scaleX: progress }} className="absolute inset-0 origin-left bg-velvet" />
             </span>
-            <span className="font-display italic text-palm-700">Creek Harbour</span>
+            <span className="w-16 text-right font-display text-lg italic text-palm-700">{active + 1} of {homes.length}</span>
           </div>
         )}
       </div>
