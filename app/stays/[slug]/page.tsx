@@ -254,10 +254,10 @@ export default async function StayPage({ params }: { params: Promise<{ slug: str
               </div>
               <Link href="/#homes" className="link">All homes <ArrowRight /></Link>
             </div>
-            <div className="mt-14 grid gap-14 md:grid-cols-3 md:gap-10">
+            <div className="mt-14 grid items-start gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-10">
               {others.map((x, i) => (
                 <Reveal key={x.slug} delay={i * 0.08}>
-                  <PropertyCard home={x} sizes="(min-width:768px) 30vw, 90vw" />
+                  <PropertyCard home={x} />
                 </Reveal>
               ))}
             </div>
